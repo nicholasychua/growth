@@ -3,13 +3,13 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, useInView, AnimatePresence } from "framer-motion";
 import Link from "next/link";
+import { SmoothScroll } from "@/components/smooth-scroll";
 import {
   Sparkles,
   Wand2,
   Zap,
   Check,
   ArrowRight,
-  Clock,
   Menu,
   X,
 } from "lucide-react";
@@ -124,43 +124,13 @@ const testimonials = [
   },
 ];
 
-const articles = [
-  {
-    tag: "Article",
-    duration: "2 min",
-    title: "How AI is transforming content creation",
-    description:
-      "Discover how artificial intelligence is reshaping the way we write.",
-    gradient: "from-violet-600/80 to-indigo-700/80",
-    featured: true,
-  },
-  {
-    tag: "Announcement",
-    duration: "5 min",
-    title: "Introducing Growth teams: built for collaboration",
-    gradient: "from-emerald-600/80 to-teal-700/80",
-  },
-  {
-    tag: "Announcement",
-    duration: "1 min",
-    title: "Growth now integrates with Google Docs",
-    gradient: "from-amber-600/80 to-orange-700/80",
-  },
-  {
-    tag: "Article",
-    duration: "2 min",
-    title: "How to use Growth for better emails",
-    gradient: "from-rose-600/80 to-pink-700/80",
-  },
-];
-
 const footerLinks = [
   { label: "home", href: "/" },
   { label: "features", href: "#features" },
   { label: "platform", href: "#platform" },
   { label: "company", href: "#" },
-  { label: "blog", href: "#articles" },
-  { label: "contact us", href: "#" },
+  { label: "our story", href: "#story" },
+  { label: "contact us", href: "https://x.com/nicholasychua" },
 ];
 
 /* ------------------------------------------------------------------ */
@@ -223,23 +193,21 @@ function Navbar() {
 
   return (
     <nav
-      className={`fixed top-0 z-50 w-full transition-all duration-300 ${
-        scrolled
-          ? "bg-[#060606]/80 backdrop-blur-xl border-b border-white/[0.06]"
-          : "bg-transparent"
+      className={`fixed top-0 z-50 w-full border-b border-white/[0.06] transition-all duration-300 ${
+        scrolled ? "bg-[#0a0812]/90 backdrop-blur-xl" : "bg-[#0a0812]"
       }`}
     >
-      <div className="mx-auto flex h-16 max-w-[1200px] items-center justify-between px-6">
+      <div className="relative mx-auto flex h-16 max-w-[1200px] items-center justify-between px-6">
         <Link href="/" className="text-[17px] font-bold tracking-tight">
-          Growth
+          Growth.
         </Link>
 
-        <div className="hidden md:flex items-center gap-8">
-          {["Platform", "Company", "Blog"].map((l) => (
+        <div className="hidden md:flex items-center gap-8 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+          {["Home", "Platform", "Company", "Blog"].map((l) => (
             <a
               key={l}
-              href={`#${l.toLowerCase()}`}
-              className="text-[13px] text-white/50 hover:text-white transition-colors"
+              href={l === "Home" ? "#" : `#${l.toLowerCase()}`}
+              className="text-sm text-white hover:text-white/70 transition-colors"
             >
               {l}
             </a>
@@ -249,13 +217,15 @@ function Navbar() {
         <div className="hidden md:flex items-center gap-3">
           <Link
             href="/dashboard"
-            className="rounded-full border border-white/15 px-5 py-2 text-[13px] font-medium text-white/80 hover:text-white hover:border-white/25 transition-all uppercase tracking-wide"
+            className="rounded-md border border-white/15 px-5 py-2 text-[13px] font-mono font-normal text-white/80 hover:text-white hover:border-white/25 transition-all uppercase tracking-wide"
           >
             Open
           </Link>
           <a
-            href="#contact"
-            className="rounded-full bg-white px-5 py-2 text-[13px] font-medium text-[#060606] hover:bg-white/90 transition-colors"
+            href="https://x.com/nicholasychua"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="rounded-md bg-white px-5 py-2 text-[13px] font-mono font-normal text-[#060606] hover:bg-white/90 transition-colors uppercase tracking-wide"
           >
             contact us
           </a>
@@ -278,10 +248,10 @@ function Navbar() {
             className="md:hidden overflow-hidden border-t border-white/[0.06] bg-[#060606]/95 backdrop-blur-xl"
           >
             <div className="px-6 py-4 space-y-3">
-              {["Platform", "Company", "Blog"].map((l) => (
+              {["Home", "Platform", "Company", "Blog"].map((l) => (
                 <a
                   key={l}
-                  href={`#${l.toLowerCase()}`}
+                  href={l === "Home" ? "#" : `#${l.toLowerCase()}`}
                   className="block text-sm text-white/50 hover:text-white transition-colors py-1"
                   onClick={() => setOpen(false)}
                 >
@@ -291,13 +261,15 @@ function Navbar() {
               <div className="flex gap-3 pt-2">
                 <Link
                   href="/dashboard"
-                  className="rounded-full border border-white/15 px-5 py-2 text-sm font-medium text-white/80"
+                  className="rounded-md border border-white/15 px-5 py-2 text-sm font-mono font-normal text-white/80 uppercase tracking-wide"
                 >
                   Open
                 </Link>
                 <a
-                  href="#contact"
-                  className="rounded-full bg-white px-5 py-2 text-sm font-medium text-[#060606]"
+                  href="https://x.com/nicholasychua"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="rounded-md bg-white px-5 py-2 text-sm font-mono font-normal text-[#060606] uppercase tracking-wide"
                 >
                   contact us
                 </a>
@@ -314,38 +286,75 @@ function Navbar() {
 /*  Hero                                                               */
 /* ------------------------------------------------------------------ */
 
+function HeroLines() {
+  return (
+    <svg
+      className="pointer-events-none absolute inset-0 h-full w-full"
+      preserveAspectRatio="none"
+      viewBox="0 0 1200 700"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      {Array.from({ length: 28 }).map((_, i) => {
+        const x = 100 + i * 38;
+        return (
+          <line
+            key={`l-${i}`}
+            x1={x}
+            y1={700}
+            x2={x + 180}
+            y2={0}
+            stroke="white"
+            strokeOpacity={0.08}
+            strokeWidth={1}
+          />
+        );
+      })}
+      {Array.from({ length: 28 }).map((_, i) => {
+        const x = 1100 - i * 38;
+        return (
+          <line
+            key={`r-${i}`}
+            x1={x}
+            y1={700}
+            x2={x - 180}
+            y2={0}
+            stroke="white"
+            strokeOpacity={0.08}
+            strokeWidth={1}
+          />
+        );
+      })}
+    </svg>
+  );
+}
+
 function HeroSection() {
   return (
     <Reveal className="relative overflow-hidden pt-36 pb-24 md:pt-44 md:pb-32 text-center">
-      <div className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[600px] rounded-full bg-purple-500/[0.07] blur-[150px]" />
-      <div className="pointer-events-none absolute top-1/3 left-1/4 w-[400px] h-[400px] rounded-full bg-blue-500/[0.05] blur-[120px]" />
+      <HeroLines />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-[#060606] to-transparent z-[1]" />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#060606] to-transparent z-[1]" />
 
-      <div className="relative mx-auto max-w-[1200px] px-6">
+      <div className="relative z-[2] mx-auto max-w-[1200px] px-6">
         <Badge>N1 Content Growth Platform</Badge>
 
-        <h1 className="mt-8 text-5xl font-bold tracking-[-0.04em] md:text-7xl lg:text-[5.5rem] leading-[1.05]">
-          <span className="bg-gradient-to-b from-white to-white/70 bg-clip-text text-transparent">
-            AI-powered
-          </span>
+        <h1 className="mt-8 text-[2.25rem] font-normal tracking-[-0.01em] md:text-[3.5rem] lg:text-[4.25rem] leading-[1.2] pb-2 bg-gradient-to-b from-white to-white/60 bg-clip-text text-transparent">
+          AI-powered
           <br />
-          <span className="bg-gradient-to-r from-purple-300 via-violet-400 to-blue-400 bg-clip-text text-transparent">
-            writing assistant.
-          </span>
+          writing assistant.
         </h1>
 
-        <p className="mx-auto mt-6 max-w-[520px] text-[15px] text-white/45 leading-relaxed md:text-base">
+        <p className="mx-auto mt-6 max-w-[520px] text-[15px] text-white/40 leading-relaxed md:text-base">
           Elevate your writing with Growth: Your AI-powered writing partner for
           creativity, productivity, and precision.
         </p>
 
         <div className="mt-10">
-          <Link
-            href="/dashboard"
-            className="group inline-flex items-center gap-2 rounded-full bg-white px-7 py-3 text-[13px] font-semibold text-[#060606] shadow-lg shadow-white/5 hover:shadow-white/10 hover:bg-white/95 transition-all"
-          >
-            Sign Up
-            <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
-          </Link>
+          <span className="inline-flex items-center gap-2 rounded-md border border-white/20 bg-white/[0.06] px-7 py-3 text-[13px] font-mono font-normal text-white/60 uppercase tracking-wide cursor-default">
+            Coming Soon
+            <ArrowRight className="h-3.5 w-3.5" />
+          </span>
         </div>
       </div>
     </Reveal>
@@ -361,7 +370,7 @@ function FeaturesSection() {
     <Reveal className="py-24 md:py-32" id="features">
       <div className="mx-auto max-w-[1200px] px-6">
         <div className="text-center mb-16">
-          <h2 className="text-3xl font-bold tracking-tight md:text-[2.75rem] leading-tight">
+          <h2 className="text-[2rem] font-normal tracking-[-0.01em] md:text-[3.25rem] leading-[1.1]">
             Empower your writing with AI.
           </h2>
           <p className="mt-4 text-white/35 text-[13px] uppercase tracking-[0.15em] font-medium">
@@ -369,7 +378,7 @@ function FeaturesSection() {
           </p>
         </div>
 
-        <div className="grid gap-4 md:grid-cols-3">
+        <div className="grid gap-5 md:grid-cols-3">
           {features.map(({ icon: Icon, title, description }, i) => (
             <motion.div
               key={title}
@@ -381,16 +390,14 @@ function FeaturesSection() {
                 delay: i * 0.12,
                 ease: [0.21, 0.47, 0.32, 0.98],
               }}
-              className="group rounded-2xl border border-white/[0.06] bg-white/[0.02] p-7 transition-all duration-300 hover:border-white/[0.12] hover:bg-white/[0.04]"
+              className="group rounded-xl border border-white/[0.08] bg-white/[0.02] p-8 pt-10 pb-10 transition-all duration-300 hover:border-white/[0.14] hover:bg-white/[0.04]"
             >
-              <div className="mb-5 inline-flex rounded-xl bg-white/[0.06] p-3">
-                <Icon
-                  className="h-5 w-5 text-white/70"
-                  strokeWidth={1.75}
-                />
-              </div>
-              <h3 className="text-[15px] font-semibold mb-2">{title}</h3>
-              <p className="text-[13px] text-white/45 leading-relaxed">
+              <Icon
+                className="h-16 w-16 text-white/[0.15] mb-16"
+                strokeWidth={0.75}
+              />
+              <h3 className="text-3xl font-normal mb-2">{title}</h3>
+              <p className="text-[13px] text-white/40 leading-relaxed">
                 {description}
               </p>
             </motion.div>
@@ -416,7 +423,7 @@ function PlatformSection() {
           <p className="text-[13px] text-white/35 uppercase tracking-[0.15em] font-medium mb-4">
             Platform
           </p>
-          <h2 className="text-3xl font-bold tracking-tight md:text-[2.75rem] leading-tight">
+          <h2 className="text-[2rem] font-normal tracking-[-0.01em] md:text-[3.25rem] leading-[1.1]">
             Our features.
           </h2>
           <p className="mx-auto mt-5 max-w-[560px] text-[13px] text-white/45 leading-relaxed">
@@ -426,7 +433,7 @@ function PlatformSection() {
           <div className="mt-7">
             <Link
               href="/dashboard"
-              className="group inline-flex items-center gap-2 rounded-full bg-white px-6 py-2.5 text-[13px] font-semibold text-[#060606] hover:bg-white/95 transition-all"
+              className="group inline-flex items-center gap-2 rounded-full bg-white px-6 py-2.5 text-[13px] font-mono font-normal text-[#060606] hover:bg-white/95 transition-all uppercase tracking-wide"
             >
               Sign Up
             </Link>
@@ -463,7 +470,7 @@ function PlatformSection() {
                 <p className="text-[11px] text-white/25 uppercase tracking-[0.15em] font-medium mb-6">
                   {current.title}
                 </p>
-                <h3 className="text-lg font-semibold leading-relaxed md:text-xl">
+                <h3 className="text-xl font-normal leading-relaxed md:text-2xl">
                   {current.heading}
                 </h3>
                 <p className="mt-4 text-[13px] text-white/45 leading-relaxed">
@@ -474,7 +481,7 @@ function PlatformSection() {
                 </p>
                 <Link
                   href="/dashboard"
-                  className="mt-6 inline-flex rounded-full border border-white/15 px-5 py-2 text-[13px] font-medium text-white/70 hover:border-white/25 hover:text-white transition-all uppercase tracking-wide"
+                  className="mt-6 inline-flex rounded-full border border-white/15 px-5 py-2 text-[13px] font-mono font-normal text-white/70 hover:border-white/25 hover:text-white transition-all uppercase tracking-wide"
                 >
                   Open
                 </Link>
@@ -498,7 +505,7 @@ function PricingSection() {
     <Reveal className="py-24 md:py-32">
       <div className="mx-auto max-w-[1200px] px-6">
         <div className="text-center mb-16">
-          <h2 className="text-3xl font-bold tracking-tight md:text-[2.75rem] leading-tight">
+          <h2 className="text-[2rem] font-normal tracking-[-0.01em] md:text-[3.25rem] leading-[1.1]">
             Membership pricing
           </h2>
           <p className="mt-3 text-white/45 text-[15px]">
@@ -551,7 +558,7 @@ function PricingSection() {
               >
                 <p className="text-[13px] text-white/45 mb-1">{plan.name}</p>
                 <div className="flex items-baseline gap-1 mb-6">
-                  <span className="text-4xl font-bold tracking-tight">
+                  <span className="text-4xl font-normal tracking-tight">
                     ${price === 0 ? "0" : price.toFixed(2)}
                   </span>
                   <span className="text-[13px] text-white/30">/month</span>
@@ -577,7 +584,7 @@ function PricingSection() {
 
                 <Link
                   href="/dashboard"
-                  className={`block w-full rounded-full py-2.5 text-center text-[13px] font-semibold transition-all duration-200 ${
+                  className={`block w-full rounded-full py-2.5 text-center text-[13px] font-mono font-normal uppercase tracking-wide transition-all duration-200 ${
                     plan.popular
                       ? "bg-white text-[#060606] hover:bg-white/90"
                       : "border border-white/15 text-white/70 hover:border-white/25 hover:text-white"
@@ -599,12 +606,17 @@ function PricingSection() {
 /* ------------------------------------------------------------------ */
 
 function TestimonialsSection() {
-  const row = [...testimonials, ...testimonials, ...testimonials, ...testimonials];
+  const row = [
+    ...testimonials,
+    ...testimonials,
+    ...testimonials,
+    ...testimonials,
+  ];
 
   return (
     <Reveal className="py-24 md:py-32 overflow-hidden">
       <div className="mx-auto max-w-[1200px] px-6 mb-14">
-        <h2 className="text-center text-3xl font-bold tracking-tight md:text-[2.75rem] leading-tight">
+        <h2 className="text-center text-[2rem] font-normal tracking-[-0.01em] md:text-[3.25rem] leading-[1.1]">
           Client&apos;s success stories.
         </h2>
       </div>
@@ -648,22 +660,17 @@ function TestimonialsSection() {
 function CTASection() {
   return (
     <Reveal className="py-24 md:py-32 text-center relative overflow-hidden">
-      <div className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] rounded-full bg-purple-500/[0.06] blur-[120px]" />
-
       <div className="relative mx-auto max-w-[1200px] px-6">
         <Badge>N1 Content Growth Platform</Badge>
 
-        <h2 className="mt-8 text-3xl font-bold tracking-tight md:text-5xl lg:text-[3.5rem] leading-tight">
-          <span className="bg-gradient-to-r from-purple-300 to-violet-400 bg-clip-text text-transparent">
-            (re)start
-          </span>{" "}
-          your writing journey.
+        <h2 className="mt-8 text-[2rem] font-normal tracking-[-0.01em] md:text-[3rem] lg:text-[3.5rem] leading-[1.1] bg-gradient-to-b from-white to-white/60 bg-clip-text text-transparent">
+          (re)start your writing journey.
         </h2>
 
         <div className="mt-10">
           <Link
             href="/dashboard"
-            className="group inline-flex items-center gap-2 rounded-full bg-white px-7 py-3 text-[13px] font-semibold text-[#060606] shadow-lg shadow-white/5 hover:shadow-white/10 hover:bg-white/95 transition-all"
+            className="group inline-flex items-center gap-2 rounded-full bg-white px-7 py-3 text-[13px] font-mono font-normal uppercase tracking-wide text-[#060606] shadow-lg shadow-white/5 hover:shadow-white/10 hover:bg-white/95 transition-all"
           >
             Sign Up
             <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
@@ -675,56 +682,82 @@ function CTASection() {
 }
 
 /* ------------------------------------------------------------------ */
-/*  Articles                                                           */
+/*  Founder Story                                                      */
 /* ------------------------------------------------------------------ */
 
-function ArticlesSection() {
+function FounderStorySection() {
   return (
-    <Reveal className="py-24 md:py-32" id="articles">
+    <Reveal className="py-24 md:py-32" id="story">
       <div className="mx-auto max-w-[1200px] px-6">
-        <h2 className="text-center text-3xl font-bold tracking-tight md:text-[2.75rem] leading-tight mb-14">
-          Latest articles.
-        </h2>
+        <div className="grid gap-10 md:grid-cols-[280px_1fr] lg:grid-cols-[320px_1fr] items-start">
+          {/* Left — intro */}
+          <motion.div
+            className="flex flex-col items-center md:items-start md:sticky md:top-32"
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
+            <div className="h-14 w-14 rounded-full bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center text-lg font-semibold text-white mb-5">
+              N
+            </div>
+            <h2 className="text-[1.5rem] md:text-[1.75rem] font-normal tracking-[-0.01em] leading-[1.2] text-center md:text-left">
+              hey! it&apos;s{" "}
+              <span className="bg-gradient-to-r from-purple-400 to-indigo-400 bg-clip-text text-transparent font-medium">
+                nicholas
+              </span>
+            </h2>
+            <p className="text-[13px] text-white/30 mt-1.5 text-center md:text-left">
+              founder of Growth
+            </p>
 
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          {articles.map((a, i) => (
-            <motion.a
-              key={a.title}
-              href="#"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: i * 0.08 }}
-              className={`group rounded-2xl border border-white/[0.06] bg-white/[0.02] overflow-hidden transition-all duration-300 hover:border-white/[0.12] ${
-                a.featured ? "md:col-span-2 lg:col-span-2 lg:row-span-2" : ""
-              }`}
+            <Link
+              href="/dashboard"
+              className="group mt-8 inline-flex items-center gap-2 rounded-full bg-white px-7 py-3 text-[13px] font-mono font-normal uppercase tracking-wide text-[#060606] shadow-lg shadow-white/5 hover:shadow-white/10 hover:bg-white/95 transition-all"
             >
-              <div
-                className={`bg-gradient-to-br ${a.gradient} ${
-                  a.featured ? "h-40 md:h-56 lg:h-64" : "h-28"
-                } w-full transition-opacity group-hover:opacity-90`}
-              />
-              <div className="p-5">
-                <div className="flex items-center gap-2.5 mb-3">
-                  <span className="rounded-full bg-white/[0.06] px-2.5 py-[3px] text-[11px] font-medium text-white/55">
-                    {a.tag}
-                  </span>
-                  <span className="flex items-center gap-1 text-[11px] text-white/30">
-                    <Clock className="h-3 w-3" />
-                    {a.duration}
-                  </span>
-                </div>
-                <h3 className="text-[14px] font-semibold leading-snug group-hover:text-purple-300 transition-colors">
-                  {a.title}
-                </h3>
-                {a.description && (
-                  <p className="mt-2 text-[12px] text-white/35 leading-relaxed">
-                    {a.description}
-                  </p>
-                )}
-              </div>
-            </motion.a>
-          ))}
+              Try it for free
+              <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
+            </Link>
+          </motion.div>
+
+          {/* Right — story */}
+          <motion.div
+            className="grid gap-x-6 gap-y-5 sm:grid-cols-2"
+            initial={{ opacity: 0, x: 20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+          >
+            <p className="text-[15px] leading-relaxed text-white/45">
+              last year i was spending{" "}
+              <span className="font-semibold text-white/80">over 1 hour every single day</span>{" "}
+              writing the same content across all platforms. going from one doc to another, reformatting, rewriting... it sucked.
+            </p>
+            <p className="text-[15px] leading-relaxed text-white/45">
+              the existing tools were{" "}
+              <span className="font-semibold text-white/80">way too expensive</span>{" "}
+              and{" "}
+              <span className="font-semibold text-white/80">way too complex</span>{" "}
+              for what i needed. i wanted something{" "}
+              <span className="font-semibold text-white/80">lightweight, simple, and affordable</span>.
+            </p>
+            <p className="text-[15px] leading-relaxed text-white/45">
+              so i built it myself — and that&apos;s how Growth was born. turns out{" "}
+              <span className="font-semibold text-white/80">thousands of others</span>{" "}
+              felt the exact same way, so i turned it into a product.
+            </p>
+            <p className="text-[15px] leading-relaxed text-white/45">
+              since then i&apos;ve used Growth daily and it&apos;s helped me reach{" "}
+              <span className="font-semibold text-white/80">100M+ impressions</span>{" "}
+              — all while spending{" "}
+              <span className="font-semibold text-white/80">less time than ever</span>{" "}
+              on the writing process.
+            </p>
+            <p className="text-[15px] leading-relaxed text-white/45 sm:col-span-2">
+              there are now 1000+ writers saving hours every week with Growth. if you want to join them, you can try it for{" "}
+              <span className="font-semibold text-white">free</span> — just click the button.
+            </p>
+          </motion.div>
         </div>
       </div>
     </Reveal>
@@ -741,7 +774,7 @@ function FooterSection() {
       <div className="mx-auto max-w-[1200px] px-6 py-14">
         <div className="flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
           <div>
-            <p className="text-[15px] font-semibold mb-1">
+            <p className="text-base font-normal mb-1">
               AI-powered writing assistant.
             </p>
           </div>
@@ -769,18 +802,20 @@ function FooterSection() {
 
 export function LandingPage() {
   return (
-    <div className="bg-[#060606] text-white min-h-screen selection:bg-purple-500/30">
-      <Navbar />
-      <main>
-        <HeroSection />
-        <FeaturesSection />
-        <PlatformSection />
-        <PricingSection />
-        <TestimonialsSection />
-        <CTASection />
-        <ArticlesSection />
-      </main>
-      <FooterSection />
-    </div>
+    <SmoothScroll>
+      <div className="bg-[#060606] text-white min-h-screen selection:bg-purple-500/30">
+        <Navbar />
+        <main>
+          <HeroSection />
+          <FeaturesSection />
+          <PlatformSection />
+          <PricingSection />
+          <TestimonialsSection />
+          <CTASection />
+          <FounderStorySection />
+        </main>
+        <FooterSection />
+      </div>
+    </SmoothScroll>
   );
 }

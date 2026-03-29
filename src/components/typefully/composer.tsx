@@ -143,7 +143,7 @@ export function Composer({ draft, onUpdateContent }: ComposerProps) {
 
         <div className="flex items-center gap-2">
           <div className="flex items-center">
-            <button className="inline-flex items-center gap-1.5 rounded-l-full border border-primary/25 bg-primary/[0.04] pl-3.5 pr-3 py-[7px] text-[13px] font-medium text-primary hover:bg-primary/[0.08] transition-colors cursor-pointer">
+            <button className="inline-flex items-center gap-1.5 rounded-l-full border border-primary/25 bg-primary/[0.04] pl-3.5 pr-3 py-[7px] text-[13px] font-mono font-medium text-primary hover:bg-primary/[0.08] transition-colors cursor-pointer">
               <Clock className="h-3.5 w-3.5" />
               Schedule
             </button>
@@ -154,7 +154,7 @@ export function Composer({ draft, onUpdateContent }: ComposerProps) {
             </button>
           </div>
 
-          <button className="inline-flex items-center gap-1.5 rounded-full bg-primary px-5 py-[7px] text-[13px] font-semibold text-white hover:bg-primary/90 transition-colors cursor-pointer shadow-sm shadow-primary/20">
+          <button className="inline-flex items-center gap-1.5 rounded-full bg-primary px-5 py-[7px] text-[13px] font-mono font-semibold text-white hover:bg-primary/90 transition-colors cursor-pointer shadow-sm shadow-primary/20">
             Publish
           </button>
 
