@@ -4,15 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import { motion, useInView, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { SmoothScroll } from "@/components/smooth-scroll";
-import {
-  Sparkles,
-  Wand2,
-  Zap,
-  Check,
-  ArrowRight,
-  Menu,
-  X,
-} from "lucide-react";
+import { Sparkles, Wand2, Zap, Check, ArrowRight, Menu, X } from "lucide-react";
 
 /* ------------------------------------------------------------------ */
 /*  Data                                                               */
@@ -197,7 +189,7 @@ function Navbar() {
         scrolled ? "bg-[#0a0812]/90 backdrop-blur-xl" : "bg-[#0a0812]"
       }`}
     >
-      <div className="relative mx-auto flex h-16 max-w-[1200px] items-center justify-between px-6">
+      <div className="relative mx-auto flex h-16 max-w-[1200px] items-center justify-between px-6 lg:max-w-none lg:px-10 xl:px-14">
         <Link href="/" className="text-[17px] font-bold tracking-tight">
           Growth.
         </Link>
@@ -216,7 +208,7 @@ function Navbar() {
 
         <div className="hidden md:flex items-center gap-3">
           <Link
-            href="/dashboard"
+            href="/login"
             className="rounded-md border border-white/15 px-5 py-2 text-[13px] font-mono font-normal text-white/80 hover:text-white hover:border-white/25 transition-all uppercase tracking-wide"
           >
             Open
@@ -260,7 +252,7 @@ function Navbar() {
               ))}
               <div className="flex gap-3 pt-2">
                 <Link
-                  href="/dashboard"
+                  href="/login"
                   className="rounded-md border border-white/15 px-5 py-2 text-sm font-mono font-normal text-white/80 uppercase tracking-wide"
                 >
                   Open
@@ -480,7 +472,7 @@ function PlatformSection() {
                   {current.cta}
                 </p>
                 <Link
-                  href="/dashboard"
+                  href="/login"
                   className="mt-6 inline-flex rounded-full border border-white/15 px-5 py-2 text-[13px] font-mono font-normal text-white/70 hover:border-white/25 hover:text-white transition-all uppercase tracking-wide"
                 >
                   Open
@@ -730,32 +722,52 @@ function FounderStorySection() {
           >
             <p className="text-[15px] leading-relaxed text-white/45">
               last year i was spending{" "}
-              <span className="font-semibold text-white/80">over 1 hour every single day</span>{" "}
-              writing the same content across all platforms. going from one doc to another, reformatting, rewriting... it sucked.
+              <span className="font-semibold text-white/80">
+                over 1 hour every single day
+              </span>{" "}
+              writing the same content across all platforms. going from one doc
+              to another, reformatting, rewriting... it sucked.
             </p>
             <p className="text-[15px] leading-relaxed text-white/45">
               the existing tools were{" "}
-              <span className="font-semibold text-white/80">way too expensive</span>{" "}
+              <span className="font-semibold text-white/80">
+                way too expensive
+              </span>{" "}
               and{" "}
-              <span className="font-semibold text-white/80">way too complex</span>{" "}
+              <span className="font-semibold text-white/80">
+                way too complex
+              </span>{" "}
               for what i needed. i wanted something{" "}
-              <span className="font-semibold text-white/80">lightweight, simple, and affordable</span>.
+              <span className="font-semibold text-white/80">
+                lightweight, simple, and affordable
+              </span>
+              .
             </p>
             <p className="text-[15px] leading-relaxed text-white/45">
-              so i built it myself — and that&apos;s how Growth was born. turns out{" "}
-              <span className="font-semibold text-white/80">thousands of others</span>{" "}
+              so i built it myself — and that&apos;s how Growth was born. turns
+              out{" "}
+              <span className="font-semibold text-white/80">
+                thousands of others
+              </span>{" "}
               felt the exact same way, so i turned it into a product.
             </p>
             <p className="text-[15px] leading-relaxed text-white/45">
-              since then i&apos;ve used Growth daily and it&apos;s helped me reach{" "}
-              <span className="font-semibold text-white/80">100M+ impressions</span>{" "}
+              since then i&apos;ve used Growth daily and it&apos;s helped me
+              reach{" "}
+              <span className="font-semibold text-white/80">
+                100M+ impressions
+              </span>{" "}
               — all while spending{" "}
-              <span className="font-semibold text-white/80">less time than ever</span>{" "}
+              <span className="font-semibold text-white/80">
+                less time than ever
+              </span>{" "}
               on the writing process.
             </p>
             <p className="text-[15px] leading-relaxed text-white/45 sm:col-span-2">
-              there are now 1000+ writers saving hours every week with Growth. if you want to join them, you can try it for{" "}
-              <span className="font-semibold text-white">free</span> — just click the button.
+              there are now 1000+ writers saving hours every week with Growth.
+              if you want to join them, you can try it for{" "}
+              <span className="font-semibold text-white">free</span> — just
+              click the button.
             </p>
           </motion.div>
         </div>

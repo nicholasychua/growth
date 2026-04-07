@@ -23,8 +23,10 @@ import {
   Keyboard,
   MonitorPlay,
   Tag,
+  Eye,
 } from "lucide-react";
 import type { Draft } from "@/types";
+import { XFeedPreview } from "./x-preview";
 
 function XLogo({ className }: { className?: string }) {
   return (
@@ -107,6 +109,7 @@ const tips = [
 
 export function Composer({ draft, onUpdateContent }: ComposerProps) {
   const [showTips, setShowTips] = useState(true);
+  const [showPreview, setShowPreview] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
@@ -156,6 +159,15 @@ export function Composer({ draft, onUpdateContent }: ComposerProps) {
 
           <button className="inline-flex items-center gap-1.5 rounded-full bg-primary px-5 py-[7px] text-[13px] font-mono font-semibold text-white hover:bg-primary/90 transition-colors cursor-pointer shadow-sm shadow-primary/20">
             Publish
+          </button>
+
+          <button
+            onClick={() => setShowPreview(true)}
+            disabled={!draft?.content?.trim()}
+            className="inline-flex items-center gap-1.5 rounded-full border border-border px-3.5 py-[7px] text-[13px] font-mono font-medium text-foreground hover:bg-hover transition-colors cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed"
+          >
+            <Eye className="h-3.5 w-3.5" />
+            Preview
           </button>
 
           <div className="ml-1 flex items-center gap-0.5">
@@ -287,6 +299,16 @@ export function Composer({ draft, onUpdateContent }: ComposerProps) {
           ))}
         </div>
       </div>
+
+      {/* X Preview Overlay */}
+      <AnimatePresence>
+        {showPreview && draft?.content?.trim() && (
+          <XFeedPreview
+            content={draft.content}
+            onClose={() => setShowPreview(false)}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 }
