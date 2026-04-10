@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { X } from "lucide-react";
 
@@ -227,17 +228,23 @@ export function XPreview({
   handle = "nicholasychua",
   onClose,
 }: XPreviewProps) {
-  const now = new Date();
-  const timeStr = now.toLocaleTimeString("en-US", {
-    hour: "numeric",
-    minute: "2-digit",
-    hour12: true,
-  });
-  const dateStr = now.toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-  });
+  const [timestamp, setTimestamp] = useState({ time: "", date: "" });
+
+  useEffect(() => {
+    const now = new Date();
+    setTimestamp({
+      time: now.toLocaleTimeString("en-US", {
+        hour: "numeric",
+        minute: "2-digit",
+        hour12: true,
+      }),
+      date: now.toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+      }),
+    });
+  }, []);
 
   return (
     <motion.div
@@ -245,7 +252,7 @@ export function XPreview({
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.2 }}
-      className="fixed inset-0 z-50 flex"
+      className="fixed inset-0 z-50 flex justify-center"
       style={{ fontFamily: X_FONT, background: "#ffffff" }}
     >
       {/* Close button (floating) */}
@@ -308,7 +315,7 @@ export function XPreview({
       </div>
 
       {/* ─── Main Feed ────────────────────────────────────────── */}
-      <div className="flex-1 max-w-[600px] border-r border-[#eff3f4] flex flex-col overflow-y-auto">
+      <div className="w-[600px] shrink-0 border-r border-[#eff3f4] flex flex-col overflow-y-auto">
         {/* Header */}
         <div
           className="sticky top-0 z-10 bg-white/85 backdrop-blur-md px-4 pt-3 pb-0 border-b border-[#eff3f4]"
@@ -400,7 +407,7 @@ export function XPreview({
                   className="text-[15px] leading-5 hover:underline cursor-pointer"
                   style={{ fontFamily: X_FONT, color: "#536471" }}
                 >
-                  {timeStr} · {dateStr}
+                  {timestamp.time} · {timestamp.date}
                 </span>
               </div>
 
@@ -551,7 +558,7 @@ export function XFeedPreview({
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.2 }}
-      className="fixed inset-0 z-50 flex"
+      className="fixed inset-0 z-50 flex justify-center"
       style={{ fontFamily: X_FONT, background: "#ffffff" }}
     >
       {/* Close button */}
@@ -588,7 +595,7 @@ export function XFeedPreview({
       </div>
 
       {/* Main Feed */}
-      <div className="flex-1 max-w-[600px] border-r border-[#eff3f4] flex flex-col overflow-y-auto">
+      <div className="w-[600px] shrink-0 border-r border-[#eff3f4] flex flex-col overflow-y-auto">
         <div className="sticky top-0 z-10 bg-white/85 backdrop-blur-md px-4 pt-3 pb-0 border-b border-[#eff3f4]">
           <h2
             className="text-[20px] font-bold leading-6 mb-3"

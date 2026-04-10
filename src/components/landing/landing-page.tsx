@@ -141,23 +141,64 @@ function Reveal({
   id?: string;
 }) {
   const ref = useRef(null);
+  const [mounted, setMounted] = useState(false);
   const inView = useInView(ref, { once: true, margin: "-60px" });
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   return (
     <motion.section
       ref={ref}
       id={id}
-      initial={{ opacity: 0, y: 40 }}
-      animate={inView ? { opacity: 1, y: 0 } : {}}
+      initial={false}
+      animate={mounted && inView ? { opacity: 1, y: 0 } : undefined}
       transition={{
         duration: 0.8,
         ease: [0.21, 0.47, 0.32, 0.98],
         delay,
       }}
+      style={!mounted ? { opacity: 1, transform: "none" } : undefined}
       className={className}
     >
       {children}
     </motion.section>
+  );
+}
+
+function FadeInView({
+  children,
+  className = "",
+  delay = 0,
+}: {
+  children: React.ReactNode;
+  className?: string;
+  delay?: number;
+}) {
+  const ref = useRef(null);
+  const [mounted, setMounted] = useState(false);
+  const inView = useInView(ref, { once: true, margin: "-40px" });
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  return (
+    <motion.div
+      ref={ref}
+      initial={false}
+      animate={mounted && inView ? { opacity: 1, y: 0 } : undefined}
+      transition={{
+        duration: 0.6,
+        delay,
+        ease: [0.21, 0.47, 0.32, 0.98],
+      }}
+      style={!mounted ? { opacity: 1, transform: "none" } : undefined}
+      className={className}
+    >
+      {children}
+    </motion.div>
   );
 }
 
@@ -372,16 +413,9 @@ function FeaturesSection() {
 
         <div className="grid gap-5 md:grid-cols-3">
           {features.map(({ icon: Icon, title, description }, i) => (
-            <motion.div
+            <FadeInView
               key={title}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-40px" }}
-              transition={{
-                duration: 0.6,
-                delay: i * 0.12,
-                ease: [0.21, 0.47, 0.32, 0.98],
-              }}
+              delay={i * 0.12}
               className="group rounded-xl border border-white/[0.08] bg-white/[0.02] p-8 pt-10 pb-10 transition-all duration-300 hover:border-white/[0.14] hover:bg-white/[0.04]"
             >
               <Icon
@@ -392,7 +426,7 @@ function FeaturesSection() {
               <p className="text-[13px] text-white/40 leading-relaxed">
                 {description}
               </p>
-            </motion.div>
+            </FadeInView>
           ))}
         </div>
       </div>
@@ -536,12 +570,9 @@ function PricingSection() {
             const price = annual ? plan.annual : plan.monthly;
 
             return (
-              <motion.div
+              <FadeInView
                 key={plan.name}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-40px" }}
-                transition={{ duration: 0.6, delay: i * 0.1 }}
+                delay={i * 0.1}
                 className={`rounded-2xl border p-7 transition-all duration-300 ${
                   plan.popular
                     ? "border-purple-500/25 bg-purple-500/[0.03]"
@@ -584,7 +615,7 @@ function PricingSection() {
                 >
                   Sign Up
                 </Link>
-              </motion.div>
+              </FadeInView>
             );
           })}
         </div>
@@ -683,12 +714,8 @@ function FounderStorySection() {
       <div className="mx-auto max-w-[1200px] px-6">
         <div className="grid gap-10 md:grid-cols-[280px_1fr] lg:grid-cols-[320px_1fr] items-start">
           {/* Left — intro */}
-          <motion.div
+          <FadeInView
             className="flex flex-col items-center md:items-start md:sticky md:top-32"
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
           >
             <div className="h-14 w-14 rounded-full bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center text-lg font-semibold text-white mb-5">
               N
@@ -710,15 +737,12 @@ function FounderStorySection() {
               Try it for free
               <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
             </Link>
-          </motion.div>
+          </FadeInView>
 
           {/* Right — story */}
-          <motion.div
+          <FadeInView
             className="grid gap-x-6 gap-y-5 sm:grid-cols-2"
-            initial={{ opacity: 0, x: 20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.1 }}
+            delay={0.1}
           >
             <p className="text-[15px] leading-relaxed text-white/45">
               last year i was spending{" "}
@@ -769,7 +793,7 @@ function FounderStorySection() {
               <span className="font-semibold text-white">free</span> — just
               click the button.
             </p>
-          </motion.div>
+          </FadeInView>
         </div>
       </div>
     </Reveal>
