@@ -107,7 +107,7 @@ function LoginForm() {
         <p className="mt-8 text-center text-[12px] leading-relaxed text-neutral-500">
           Don&apos;t have an account?{" "}
           <a
-            href="#"
+            href="/dashboard"
             className="text-white font-medium underline-offset-4 hover:underline"
           >
             Sign up

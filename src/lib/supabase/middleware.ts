@@ -11,7 +11,9 @@ export async function updateSession(request: NextRequest) {
   }
 
   const isPublicRoute =
-    pathname === "/" || pathname.startsWith("/login");
+    pathname === "/" ||
+    pathname.startsWith("/login") ||
+    pathname.startsWith("/dashboard");
 
   const hasXSession = request.cookies.has("x_user_id");
 
