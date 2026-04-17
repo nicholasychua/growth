@@ -1,14 +1,7 @@
-import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
 export async function updateSession(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
-
-  // OAuth routes manage their own cookies/redirects — pass through
-  // without Supabase processing that can interfere with cookie flow
-  if (pathname.startsWith("/api/auth") || pathname.startsWith("/auth/")) {
-    return NextResponse.next();
-  }
 
   const isPublicRoute =
     pathname === "/" ||
@@ -17,17 +10,30 @@ export async function updateSession(request: NextRequest) {
 
   const hasXSession = request.cookies.has("x_user_id");
 
+  // Fast path: public routes never need the Supabase session lookup.
+  // This avoids a network round-trip to Supabase on every page load and
+  // prevents blocking the homepage if Supabase is slow/unreachable.
+  if (isPublicRoute) {
+    return NextResponse.next();
+  }
+
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
+  // Fast path: if Supabase isn't configured, skip the heavy import entirely.
   if (!supabaseUrl || !supabaseKey || supabaseUrl.includes("your-supabase")) {
-    if (!hasXSession && !isPublicRoute) {
+    if (!hasXSession) {
       const url = request.nextUrl.clone();
       url.pathname = "/login";
       return NextResponse.redirect(url);
     }
     return NextResponse.next();
   }
+
+  // Lazy import: only pull @supabase/ssr into the middleware bundle
+  // when we actually need it, keeping the Edge bundle small and cold
+  // starts / dev compiles fast.
+  const { createServerClient } = await import("@supabase/ssr");
 
   let supabaseResponse = NextResponse.next({ request });
 
@@ -58,7 +64,7 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user && !hasXSession && !isPublicRoute) {
+  if (!user && !hasXSession) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
     return NextResponse.redirect(url);

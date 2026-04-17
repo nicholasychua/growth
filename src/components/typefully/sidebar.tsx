@@ -16,7 +16,6 @@ import {
   Settings,
   Zap,
   X,
-  ArrowRight,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { Draft, DraftTab } from "@/types";
@@ -64,14 +63,12 @@ export function Sidebar({
   onDeleteDraft,
 }: SidebarProps) {
   const [listCollapsed, setListCollapsed] = useState(false);
-  const [showUpdate, setShowUpdate] = useState(true);
-
   return (
     <aside className="flex h-full w-[280px] shrink-0 flex-col border-r border-border bg-background select-none">
       {/* User Header */}
       <div className="flex items-center justify-between px-3 py-2.5">
         <button className="flex items-center gap-2 rounded-lg px-1.5 py-1 hover:bg-hover transition-colors cursor-pointer">
-          <div className="h-7 w-7 rounded-full bg-gradient-to-br from-sky-400 to-blue-600 flex items-center justify-center text-white text-[11px] font-semibold shrink-0">
+          <div className="h-7 w-7 rounded-full bg-gradient-to-br from-neutral-700 to-neutral-900 flex items-center justify-center text-white text-[11px] font-semibold shrink-0">
             N
           </div>
           <span className="text-[13px] font-semibold tracking-[-0.01em]">
@@ -204,46 +201,6 @@ export function Sidebar({
           )}
         </button>
       </div>
-
-      {/* Update Banner */}
-      <AnimatePresence>
-        {showUpdate && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.25 }}
-            className="border-t border-border"
-          >
-            <div className="px-4 py-3">
-              <div className="flex items-center justify-between mb-1">
-                <div className="flex items-center gap-1.5">
-                  <ArrowRight className="h-3.5 w-3.5 text-primary" />
-                  <span className="text-[12px] font-medium text-primary">
-                    Latest update
-                  </span>
-                </div>
-                <button
-                  onClick={() => setShowUpdate(false)}
-                  className="text-muted-foreground/60 hover:text-muted-foreground transition-colors cursor-pointer p-0.5"
-                >
-                  <X className="h-3.5 w-3.5" />
-                </button>
-              </div>
-              <p className="text-[13px] font-medium leading-snug">
-                Mention Teammates and Slack Notifications
-              </p>
-              <div className="mt-2 h-9 rounded-lg bg-muted flex items-center gap-2 px-2.5 overflow-hidden">
-                <span className="text-[11px] text-muted-foreground truncate flex-1">
-                  ad on existing content.
-                </span>
-                <div className="h-5 w-5 rounded-full bg-muted-foreground/15 shrink-0" />
-                <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-primary/60 rounded-full" />
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
 
       {/* Navigation Footer */}
       <nav className="border-t border-border px-2 py-1.5 space-y-0.5">

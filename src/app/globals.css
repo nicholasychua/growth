@@ -10,19 +10,19 @@
 
 @theme {
   --color-background: #ffffff;
-  --color-foreground: #1a1a1a;
-  --color-muted: #f5f5f5;
-  --color-muted-foreground: #999999;
-  --color-border: #ebebeb;
-  --color-ring: #4c9eeb;
-  --color-primary: #4c9eeb;
+  --color-foreground: #0a0a0a;
+  --color-muted: #f4f4f4;
+  --color-muted-foreground: #737373;
+  --color-border: #ececec;
+  --color-ring: #0a0a0a;
+  --color-primary: #0a0a0a;
   --color-primary-foreground: #ffffff;
-  --color-accent: #eef6ff;
-  --color-accent-foreground: #4c9eeb;
+  --color-accent: #f4f4f4;
+  --color-accent-foreground: #0a0a0a;
   --color-destructive: #ef4444;
   --color-destructive-foreground: #ffffff;
   --color-success: #22c55e;
-  --color-hover: #f8f8f8;
+  --color-hover: #f7f7f7;
 
   --font-sans: "Open Sauce One", ui-sans-serif, system-ui, -apple-system, sans-serif;
   --font-serif: var(--font-playfair), "Playfair Display", Georgia, "Times New Roman", serif;
